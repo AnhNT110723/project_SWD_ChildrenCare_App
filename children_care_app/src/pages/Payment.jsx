@@ -12,75 +12,6 @@ import {
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Footer from "../components/Footer";
-
-// Dữ liệu mẫu
-const mockPayments = [
-  {
-    id: 1,
-    reservationId: 1001,
-    amount: 2500000,
-    paymentMethod: "CREDIT_CARD",
-    status: "COMPLETED",
-    createdAt: "2024-03-20T08:30:00Z"
-  },
-  {
-    id: 2,
-    reservationId: 1002,
-    amount: 1800000,
-    paymentMethod: "BANK_TRANSFER",
-    status: "PENDING",
-    createdAt: "2024-03-20T09:15:00Z"
-  },
-  {
-    id: 3,
-    reservationId: 1003,
-    amount: 3200000,
-    paymentMethod: "CREDIT_CARD",
-    status: "COMPLETED",
-    createdAt: "2024-03-20T10:00:00Z"
-  },
-  {
-    id: 4,
-    reservationId: 1004,
-    amount: 1500000,
-    paymentMethod: "CASH",
-    status: "COMPLETED",
-    createdAt: "2024-03-20T11:30:00Z"
-  },
-  {
-    id: 5,
-    reservationId: 1005,
-    amount: 2800000,
-    paymentMethod: "DEBIT_CARD",
-    status: "FAILED",
-    createdAt: "2024-03-20T13:45:00Z"
-  },
-  {
-    id: 6,
-    reservationId: 1006,
-    amount: 2100000,
-    paymentMethod: "BANK_TRANSFER",
-    status: "PENDING",
-    createdAt: "2024-03-20T14:20:00Z"
-  },
-  {
-    id: 7,
-    reservationId: 1007,
-    amount: 1900000,
-    paymentMethod: "CREDIT_CARD",
-    status: "COMPLETED",
-    createdAt: "2024-03-20T15:10:00Z"
-  },
-  {
-    id: 8,
-    reservationId: 1008,
-    amount: 3500000,
-    paymentMethod: "DEBIT_CARD",
-    status: "COMPLETED",
-    createdAt: "2024-03-20T16:00:00Z"
-  }
-];
 
 const Payment = () => {
   const [payments, setPayments] = useState([]);
@@ -88,22 +19,20 @@ const Payment = () => {
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
-    reservationId: "",
     amount: "",
-    paymentMethod: "CREDIT_CARD",
-    status: "PENDING"
+    paymentMethod: "Momo",
+    status: "Pending"
   });
+  const [amountError, setAmountError] = useState("");
 
-  // Fetch payments - sử dụng dữ liệu mẫu
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      // Giả lập delay của API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setPayments(mockPayments);
+      const response = await axios.get('http://localhost:5190/api/payment');
+      setPayments(response.data);
     } catch (error) {
       console.error("Error fetching payments:", error);
-      toast.error("Failed to fetch payments");
+      toast.error("Failed to fetch payments: " + (error.response?.data?.message || error.message));
     } finally {
       setLoading(false);
     }
@@ -113,96 +42,113 @@ const Payment = () => {
     fetchPayments();
   }, []);
 
-  // Handle form submission với dữ liệu mẫu
+  const validateAmount = (value) => {
+    if (value === "") return "Amount is required";
+    const numValue = Number(value);
+    if (isNaN(numValue)) {
+      return "Amount must be a number";
+    }
+    if (numValue < 0) {
+      return "Amount cannot be negative";
+    }
+    return "";
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    const error = validateAmount(value);
+    setAmountError(error);
+    setFormData({ ...formData, amount: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const amountValidation = validateAmount(formData.amount);
+    if (amountValidation) {
+      setAmountError(amountValidation);
+      return;
+    }
+
     try {
       setLoading(true);
-      // Giả lập delay của API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
       const payload = {
-        ...formData,
         amount: parseFloat(formData.amount),
-        reservationId: parseInt(formData.reservationId),
-        id: editMode ? formData.id : mockPayments.length + 1,
-        createdAt: new Date().toISOString()
+        paymentMethod: formData.paymentMethod,
+        status: formData.status,
       };
 
+      console.log("Payload gửi lên API:", payload); // Log payload để kiểm tra
+
       if (editMode) {
-        const updatedPayments = payments.map(p => 
-          p.id === payload.id ? payload : p
-        );
-        setPayments(updatedPayments);
+        await axios.put(`http://localhost:5190/api/payment/${formData.id}`, payload);
         toast.success("Payment updated successfully");
       } else {
-        setPayments([...payments, payload]);
+        await axios.post('http://localhost:5190/api/payment', payload);
         toast.success("Payment created successfully");
       }
+      
       setShowModal(false);
       resetForm();
+      fetchPayments();
     } catch (error) {
       console.error("Error submitting payment:", error);
-      toast.error("Operation failed");
+      const errorMessage = error.response?.data?.message || error.response?.data || error.message;
+      toast.error(`Operation failed: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle payment deletion với dữ liệu mẫu
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this payment?")) {
       try {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const filteredPayments = payments.filter(p => p.id !== id);
-        setPayments(filteredPayments);
+        await axios.delete(`http://localhost:5190/api/payment/${id}`);
         toast.success("Payment deleted successfully");
+        fetchPayments();
       } catch (error) {
         console.error("Error deleting payment:", error);
-        toast.error("Failed to delete payment");
+        toast.error("Failed to delete payment: " + (error.response?.data?.message || error.message));
       } finally {
         setLoading(false);
       }
     }
   };
 
-  // Handle edit button click
   const handleEdit = (payment) => {
     setFormData({
       ...payment,
       amount: payment.amount.toString(),
-      reservationId: payment.reservationId.toString()
     });
     setEditMode(true);
     setShowModal(true);
+    setAmountError("");
   };
 
-  // Reset form
   const resetForm = () => {
     setFormData({
-      reservationId: "",
       amount: "",
-      paymentMethod: "CREDIT_CARD",
-      status: "PENDING"
+      paymentMethod: "Momo",
+      status: "Pending"
     });
     setEditMode(false);
+    setAmountError("");
   };
 
   const getStatusBadgeVariant = (status) => {
     switch (status) {
-      case "COMPLETED":
+      case "Paid":
         return "success";
-      case "PENDING":
+      case "Pending":
         return "warning";
-      case "FAILED":
+      case "Failed":
         return "danger";
       default:
         return "secondary";
     }
   };
 
-  // Format currency
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -230,7 +176,6 @@ const Payment = () => {
             </Col>
           </Row>
 
-          {/* Payment Table */}
           {loading ? (
             <div className="text-center py-4">
               <Spinner animation="border" role="status" variant="primary">
@@ -243,7 +188,6 @@ const Payment = () => {
                 <thead className="bg-light">
                   <tr>
                     <th className="text-center">ID</th>
-                    <th>Reservation ID</th>
                     <th>Amount</th>
                     <th>Payment Method</th>
                     <th className="text-center">Status</th>
@@ -262,7 +206,6 @@ const Payment = () => {
                     payments.map((payment) => (
                       <tr key={payment.id}>
                         <td className="text-center">{payment.id}</td>
-                        <td>{payment.reservationId}</td>
                         <td className="text-end">{formatCurrency(payment.amount)}</td>
                         <td>{payment.paymentMethod.replace(/_/g, ' ')}</td>
                         <td className="text-center">
@@ -296,7 +239,6 @@ const Payment = () => {
             </div>
           )}
 
-          {/* Payment Form Modal */}
           <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton className="bg-light">
               <Modal.Title>{editMode ? "Edit Payment" : "Add New Payment"}</Modal.Title>
@@ -304,29 +246,18 @@ const Payment = () => {
             <Modal.Body>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Reservation ID</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={formData.reservationId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, reservationId: e.target.value })
-                    }
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
                   <Form.Label>Amount (VND)</Form.Label>
                   <Form.Control
                     type="number"
-                    step="1000"
                     min="0"
                     value={formData.amount}
-                    onChange={(e) =>
-                      setFormData({ ...formData, amount: e.target.value })
-                    }
+                    onChange={handleAmountChange}
                     required
+                    isInvalid={!!amountError}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {amountError}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -337,10 +268,11 @@ const Payment = () => {
                       setFormData({ ...formData, paymentMethod: e.target.value })
                     }
                   >
-                    <option value="CREDIT_CARD">Credit Card</option>
-                    <option value="DEBIT_CARD">Debit Card</option>
-                    <option value="BANK_TRANSFER">Bank Transfer</option>
-                    <option value="CASH">Cash</option>
+                    <option value="Momo">Momo</option>
+                    <option value="VNPay">VNPay</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Stripe">Stripe</option>
+                    <option value="Cash">Cash</option>
                   </Form.Select>
                 </Form.Group>
 
@@ -352,9 +284,9 @@ const Payment = () => {
                       setFormData({ ...formData, status: e.target.value })
                     }
                   >
-                    <option value="PENDING">Pending</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="FAILED">Failed</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Failed">Failed</option>
                   </Form.Select>
                 </Form.Group>
 
@@ -362,7 +294,7 @@ const Payment = () => {
                   <Button variant="secondary" className="me-2" onClick={() => setShowModal(false)}>
                     Cancel
                   </Button>
-                  <Button variant="primary" type="submit" disabled={loading}>
+                  <Button variant="primary" type="submit" disabled={loading || !!amountError}>
                     {loading ? (
                       <>
                         <Spinner
@@ -385,7 +317,6 @@ const Payment = () => {
           </Modal>
         </Container>
       </div>
-     
     </div>
   );
 };
