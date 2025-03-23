@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.jsx';
+import Homepage from './pages/Homepage.jsx';
 import HelloWorld from './components/HelloWorld.jsx';
 import Detail from './components/Detail.jsx';
 import Header from './components/Header.jsx';
@@ -11,14 +12,18 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-      <Header /> 
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Homepage" element={<Homepage />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="/helloworld" element={<HelloWorld />} />
           <Route path="/detail" element={<Detail />} />
+          {/* route detail mai làm */}
+          {/* <Route path="/blog/:id" element={<BlogDetails />} /> */}
+          {/* <Route path="/service/:id" element={<ServiceDetails />} /> */}
         </Routes>
-        <Footer /> 
+        <Footer />
       </div>
     </BrowserRouter>
   );
