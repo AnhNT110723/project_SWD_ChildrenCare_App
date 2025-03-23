@@ -8,6 +8,10 @@ import Footer from './components/Footer.jsx';
 import Reservation from './pages/Reservation.jsx';
 import ReservationCart from './pages/ReservationCart.jsx';
 import CreateReservation from './pages/CreateReservation.jsx';
+import BlogsList from "./pages/BlogsList";
+import BlogDetails from "./pages/BlogDetails";
+import SliderList from "./pages/SliderList";
+import SliderDetails from "./pages/SliderDetails";
 import './App.css'; // Giữ nếu bạn cần style cho App
 
 function App() {
@@ -24,8 +28,10 @@ function App() {
           <Route path="/reservationCart" element={<ReservationCart />} />
           <Route path="/createReservation" element={<CreateReservation />} />
           {/* route detail mai làm */}
-          {/* <Route path="/blog/:id" element={<BlogDetails />} /> */}
-          {/* <Route path="/service/:id" element={<ServiceDetails />} /> */}
+          <Route path="/blogs" element={<BlogsList />} />
+          <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/sliders" element={<SliderList />} />
+          <Route path="/slider/:id" element={<SliderDetails />} />
         </Routes>
         <Footer />
       </div>
