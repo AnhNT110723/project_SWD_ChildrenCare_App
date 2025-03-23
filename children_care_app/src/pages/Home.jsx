@@ -20,13 +20,15 @@ const Home = () => {
       <section className="features">
         <h2>Our Features</h2>
         <div className="feature-list">
-          <div className="feature-item">
-            <h3>For Guests</h3>
-            <p>
-              Explore our services and learn how we can help even if you're not
-              registered yet.
-            </p>
-          </div>
+          <Link to="/payment" className="feature-item">
+            <div className="">
+              <h3>For payment</h3>
+              <p>
+                Explore our services and learn how we can help even if you're
+                not registered yet.
+              </p>
+            </div>
+          </Link>
           <Link to="/reservation" className="feature-item">
             <div>
               <h3>For Customers</h3>

@@ -13,6 +13,10 @@ import BlogDetails from "./pages/BlogDetails";
 import SliderList from "./pages/SliderList";
 import SliderDetails from "./pages/SliderDetails";
 import './App.css'; // Giữ nếu bạn cần style cho App
+import Payment from './pages/Payment.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -23,6 +27,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Homepage" element={<Homepage />} />
           <Route path="/reservation" element={<Reservation />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/helloworld" element={<HelloWorld />} />
           <Route path="/detail" element={<Detail />} />
           <Route path="/reservationCart" element={<ReservationCart />} />
@@ -34,6 +39,7 @@ function App() {
           <Route path="/slider/:id" element={<SliderDetails />} />
         </Routes>
         <Footer />
+        <ToastContainer />
       </div>
     </BrowserRouter>
   );
