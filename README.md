@@ -10,6 +10,10 @@ npm install
 ```
 npm install axios
 ```
+3.
+```
+npm install react-modal
+```
 run:
 ```
 npm start
