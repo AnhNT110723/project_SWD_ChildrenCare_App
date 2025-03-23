@@ -12,7 +12,6 @@ import {
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
-import "../styles/Reservation.css";
 import Footer from "../components/Footer";
 
 // Dữ liệu mẫu
