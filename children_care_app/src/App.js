@@ -17,6 +17,10 @@ import Payment from './pages/Payment.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import MedicalList from './pages/MedicalList.jsx';
+import AddMedical from './pages/AddMedical.jsx';
+import EditMedical from './pages/EditMedical.jsx';
+import MedicalDetails from './pages/MedicalDetails.jsx';
 
 function App() {
   return (
@@ -37,6 +41,10 @@ function App() {
           <Route path="/blog/:id" element={<BlogDetails />} />
           <Route path="/sliders" element={<SliderList />} />
           <Route path="/slider/:id" element={<SliderDetails />} />
+          <Route path="/MedicalList" element={<MedicalList />} />
+          <Route path="/AddMedical" element={<AddMedical />} />
+          <Route path="/EditMedical/:id" element={<EditMedical />} />
+          <Route path="/DetailsMedical/:id" element={<MedicalDetails />} />
         </Routes>
         <Footer />
         <ToastContainer />
