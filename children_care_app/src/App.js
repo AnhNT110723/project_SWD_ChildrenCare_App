@@ -7,6 +7,10 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Reservation from './pages/Reservation.jsx';
 import './App.css'; // Giữ nếu bạn cần style cho App
+import Payment from './pages/Payment.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -17,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Homepage" element={<Homepage />} />
           <Route path="/reservation" element={<Reservation />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/helloworld" element={<HelloWorld />} />
           <Route path="/detail" element={<Detail />} />
           {/* route detail mai làm */}
@@ -24,6 +29,7 @@ function App() {
           {/* <Route path="/service/:id" element={<ServiceDetails />} /> */}
         </Routes>
         <Footer />
+        <ToastContainer />
       </div>
     </BrowserRouter>
   );
