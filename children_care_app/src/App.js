@@ -8,6 +8,7 @@ import Footer from './components/Footer.jsx';
 import Reservation from './pages/Reservation.jsx';
 import ReservationCart from './pages/ReservationCart.jsx';
 import CreateReservation from './pages/CreateReservation.jsx';
+import EditReservation from './pages/UpdateReservation.jsx';
 import BlogsList from "./pages/BlogsList";
 import BlogDetails from "./pages/BlogDetails";
 import SliderList from "./pages/SliderList";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/detail" element={<Detail />} />
           <Route path="/reservationCart" element={<ReservationCart />} />
           <Route path="/createReservation" element={<CreateReservation />} />
+           <Route path="/editReservation/:id" element={<EditReservation />} />
           {/* route detail mai làm */}
           <Route path="/blogs" element={<BlogsList />} />
           <Route path="/blog/:id" element={<BlogDetails />} />

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Reservations/CreateReservation.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateReservation = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     childName: "",
     date: "",
@@ -35,6 +37,7 @@ const CreateReservation = () => {
 
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     try {
         await axios.post("http://localhost:5190/api/reservations", {
@@ -45,6 +48,7 @@ const CreateReservation = () => {
             time: formData.time       // Dạng "10:00"
         });
       alert("Reservation created successfully!");
+      navigate("/reservation");
     } catch (error) {
       console.error("Error creating reservation:", error);
       alert("Failed to create reservation. Please try again.");
