@@ -9,8 +9,8 @@ const SliderList = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
-    //const token = localStorage.getItem("token");
-
+    const token = localStorage.getItem("token");
+    console.log(token);
     useEffect(() => {
         fetchSliders();
     }, [page, search]);
@@ -18,9 +18,9 @@ const SliderList = () => {
     const fetchSliders = () => {
         axios
             .get(`http://localhost:5190/api/sliders?page=${page}&search=${search}`, 
-                // {
-                //     headers: { Authorization: `Bearer ${token}` },
-                // } phan quyen
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
             )
             .then((response) => {
                 setSliders(response.data.sliders);
@@ -33,9 +33,9 @@ const SliderList = () => {
         if (window.confirm("Are you sure you want to delete this slider?")) {
             axios
                 .delete(`http://localhost:5190/api/sliders/${id}`
-                    // , {
-                    //     headers: { Authorization: `Bearer ${token}` },
-                    // } phan quyen
+                    , {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
                 )
                 .then(() => {
                     setSliders(sliders.filter(s => s.id !== id));
@@ -53,9 +53,9 @@ const SliderList = () => {
         };
         axios
             .post("http://localhost:5190/api/sliders", newSlider
-                // , {
-                //     headers: { Authorization: `Bearer ${token}` },
-                // } phan quyen
+                , {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
             )
             .then((response) => setSliders([...sliders, response.data]))
             .catch((error) => console.error("Error adding slider:", error));

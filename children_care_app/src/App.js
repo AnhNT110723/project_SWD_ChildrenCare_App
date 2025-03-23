@@ -13,6 +13,7 @@ import BlogsList from "./pages/BlogsList";
 import BlogDetails from "./pages/BlogDetails";
 import SliderList from "./pages/SliderList";
 import SliderDetails from "./pages/SliderDetails";
+import AdminPage from "./pages/AdminPage";
 import './App.css'; // Giữ nếu bạn cần style cho App
 import Payment from './pages/Payment.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -43,6 +44,8 @@ function App() {
           <Route path="/blog/:id" element={<BlogDetails />} />
           <Route path="/sliders" element={<SliderList />} />
           <Route path="/slider/:id" element={<SliderDetails />} />
+          <Route path="/admin/*" element={<AdminPage />} />
+
           <Route path="/MedicalList" element={<MedicalList />} />
           <Route path="/AddMedical" element={<AddMedical />} />
           <Route path="/EditMedical/:id" element={<EditMedical />} />
