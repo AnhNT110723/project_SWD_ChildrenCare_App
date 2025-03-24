@@ -130,7 +130,9 @@ const Reservation = () => {
                     </td>
                     <td>
                       {reservation.status === "Pending" && (
-                        <button className="btn btn-warning btn-sm">Payment</button>
+                          <Link   to={`/reservationCart/${reservation.id}`} className="btn btn-warning btn-sm">
+                            Payment
+                          </Link>
                       )}
                     </td>
                   </tr>
