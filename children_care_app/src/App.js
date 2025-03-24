@@ -36,7 +36,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/helloworld" element={<HelloWorld />} />
           <Route path="/detail" element={<Detail />} />
-          <Route path="/reservationCart" element={<ReservationCart />} />
+          <Route path="/reservationCart/:id" element={<ReservationCart />} />
           <Route path="/createReservation" element={<CreateReservation />} />
            <Route path="/editReservation/:id" element={<EditReservation />} />
           {/* route detail mai làm */}
